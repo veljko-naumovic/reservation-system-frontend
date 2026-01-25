@@ -1,6 +1,10 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-	reactStrictMode: true,
+import type { NextConfig } from "next";
+import path from "path";
+
+const nextConfig: NextConfig = {
+	turbopack: {
+		root: path.resolve(__dirname),
+	},
 };
 
-module.exports = nextConfig;
+export default nextConfig;

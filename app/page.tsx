@@ -1,24 +1,30 @@
-export default function Page() {
+import Link from "next/link";
+
+export default function HomePage() {
 	return (
-		<div className="min-h-screen flex items-center justify-center bg-slate-900">
-			<div className="p-8 rounded-xl bg-white shadow-xl">
-				<h1 className="text-4xl font-bold text-emerald-500">
-					Tailwind radi ✅
-				</h1>
+		<section className="space-y-6">
+			<h1 className="text-3xl font-bold">Booking & Reservation App</h1>
 
-				<p className="mt-4 text-gray-600">
-					Ako vidiš ovu karticu – sve je OK.
-				</p>
+			<p className="text-gray-600 max-w-xl">
+				Simple demo application for managing bookings and reservations.
+				Built with Next.js, TypeScript and Tailwind CSS.
+			</p>
 
-				<button className="mt-6 px-6 py-3 rounded-lg bg-emerald-500 text-white hover:bg-emerald-600 transition">
-					Test dugme
-				</button>
+			<div className="flex gap-4">
+				<Link
+					href="/bookings"
+					className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+				>
+					View bookings
+				</Link>
+
+				<Link
+					href="/create-booking"
+					className="px-4 py-2 rounded border border-gray-300 hover:bg-gray-100"
+				>
+					Create booking
+				</Link>
 			</div>
-			<div className="min-h-screen bg-slate-900 p-8">
-				<div className="mx-auto max-w-md border border-slate-900 rounded-br-full bg-slate-900 p-6">
-					<h1 className="text-white text-xl">Nova rezervacija</h1>
-				</div>
-			</div>
-		</div>
+		</section>
 	);
 }
