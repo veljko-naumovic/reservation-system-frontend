@@ -1,26 +1,35 @@
-import { getBookings } from "@/app/lib/api";
+import { getBookingById } from "@/lib/api";
+import { formatDate, getDuration } from "@/lib/date";
 
-export default async function BookingsPage() {
-	const bookings = await getBookings();
+interface Props {
+	params: Promise<{ id: string }>;
+}
+
+export default async function BookingDetailsPage({ params }: Props) {
+	const { id } = await params;
+
+	const booking = await getBookingById(id);
 
 	return (
-		<section>
-			<h2 className="text-2xl font-semibold mb-4">Bookings</h2>
+		<section className="max-w-xl space-y-4">
+			<h2 className="text-2xl font-semibold">{booking.title}</h2>
 
-			{bookings.length === 0 ? (
-				<p className="text-gray-500">No bookings yet.</p>
-			) : (
-				<ul className="space-y-3">
-					{bookings.map((b) => (
-						<li key={b.id} className="border rounded p-4 bg-white">
-							<div className="font-medium">{b.title}</div>
-							<div className="text-sm text-gray-500">
-								{b.guestName} • {b.dateFrom} → {b.dateTo}
-							</div>
-						</li>
-					))}
-				</ul>
-			)}
+			<div className="text-gray-600">
+				Guest: <strong>{booking.guestName}</strong>
+			</div>
+
+			<div className="text-gray-600">
+				Dates: {formatDate(booking.dateFrom)} →{" "}
+				{formatDate(booking.dateTo)}
+			</div>
+
+			<div className="text-gray-600">
+				Duration: {getDuration(booking.dateFrom, booking.dateTo)} nights
+			</div>
+
+			<span className="inline-block text-sm px-3 py-1 rounded bg-yellow-100 text-yellow-700">
+				{booking.status}
+			</span>
 		</section>
 	);
 }

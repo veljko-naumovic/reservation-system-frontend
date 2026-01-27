@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createBooking } from "../lib/api";
+import { createBooking } from "../../lib/api";
 
 export default function CreateBookingPage() {
 	const router = useRouter();

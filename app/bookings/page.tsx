@@ -1,5 +1,6 @@
-import { formatDate, getDuration } from "../lib/date";
-import { getBookings } from "../lib/api";
+import { formatDate, getDuration } from "../../lib/date";
+import { getBookings } from "../../lib/api";
+import Link from "next/link";
 
 export default async function BookingsPage() {
 	const bookings = await getBookings();
@@ -18,7 +19,12 @@ export default async function BookingsPage() {
 							className="border rounded p-4 bg-white flex justify-between items-center"
 						>
 							<div>
-								<div className="font-medium">{b.title}</div>
+								<Link
+									href={`/bookings/${b.id}`}
+									className="font-medium hover:underline"
+								>
+									{b.title}
+								</Link>
 
 								<div className="text-sm text-gray-500">
 									{b.guestName} • {formatDate(b.dateFrom)} →{" "}
