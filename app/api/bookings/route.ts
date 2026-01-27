@@ -21,3 +21,19 @@ export async function POST(req: Request) {
 
 	return NextResponse.json(newBooking, { status: 201 });
 }
+
+export async function DELETE(req: Request) {
+	const { searchParams } = new URL(req.url);
+	const id = searchParams.get("id");
+
+	if (!id) {
+		return NextResponse.json(
+			{ message: "ID is required" },
+			{ status: 400 },
+		);
+	}
+
+	bookings = bookings.filter((b) => b.id !== id);
+
+	return NextResponse.json({ success: true });
+}

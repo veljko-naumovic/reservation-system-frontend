@@ -1,3 +1,4 @@
+import DeleteBookingButton from "@/app/components/booking/DeleteBookingButton";
 import { getBookingById } from "@/lib/api";
 import { formatDate, getDuration } from "@/lib/date";
 
@@ -9,6 +10,8 @@ export default async function BookingDetailsPage({ params }: Props) {
 	const { id } = await params;
 
 	const booking = await getBookingById(id);
+
+	console.log(booking);
 
 	return (
 		<section className="max-w-xl space-y-4">
@@ -30,6 +33,7 @@ export default async function BookingDetailsPage({ params }: Props) {
 			<span className="inline-block text-sm px-3 py-1 rounded bg-yellow-100 text-yellow-700">
 				{booking.status}
 			</span>
+			<DeleteBookingButton id={booking.id} />
 		</section>
 	);
 }

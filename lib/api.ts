@@ -39,3 +39,16 @@ export async function getBookingById(id: string): Promise<Booking> {
 	const data: Booking[] = await res.json();
 	return data[0];
 }
+
+export async function deleteBooking(id: string) {
+	const res = await fetch(`http://localhost:3000/api/bookings?id=${id}`, {
+		method: "DELETE",
+		cache: "no-store",
+	});
+
+	if (!res.ok) {
+		throw new Error("Failed to delete booking");
+	}
+
+	return res.json();
+}
