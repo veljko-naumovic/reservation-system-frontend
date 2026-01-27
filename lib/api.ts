@@ -52,3 +52,5 @@ export async function deleteBooking(id: string) {
 
 	return res.json();
 }
+
+await new Promise((r) => setTimeout(r, 1500));

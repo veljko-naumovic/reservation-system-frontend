@@ -11,8 +11,6 @@ export default async function BookingDetailsPage({ params }: Props) {
 
 	const booking = await getBookingById(id);
 
-	console.log(booking);
-
 	return (
 		<section className="max-w-xl space-y-4">
 			<h2 className="text-2xl font-semibold">{booking.title}</h2>
