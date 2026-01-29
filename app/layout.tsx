@@ -1,4 +1,5 @@
 // app/layout.tsx
+import Providers from "./components/Providers";
 import "./globals.css";
 
 export const metadata = {
@@ -14,21 +15,23 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body>
-				<div className="min-h-screen flex flex-col">
-					<header className="border-b bg-white">
-						<div className="container mx-auto px-4 py-4 font-semibold">
-							Booking App
-						</div>
-					</header>
+				<Providers>
+					<div className="min-h-screen flex flex-col">
+						<header className="border-b bg-white">
+							<div className="container mx-auto px-4 py-4 font-semibold">
+								Booking App
+							</div>
+						</header>
 
-					<main className="flex-1 container mx-auto px-4 py-6">
-						{children}
-					</main>
+						<main className="flex-1 container mx-auto px-4 py-6">
+							{children}
+						</main>
 
-					<footer className="border-t bg-white text-sm text-center py-4">
-						© {new Date().getFullYear()} Booking App
-					</footer>
-				</div>
+						<footer className="border-t bg-white text-sm text-center py-4">
+							© {new Date().getFullYear()} Booking App
+						</footer>
+					</div>
+				</Providers>
 			</body>
 		</html>
 	);
