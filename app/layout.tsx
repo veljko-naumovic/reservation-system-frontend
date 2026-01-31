@@ -1,5 +1,7 @@
 import Providers from "@/components/Providers";
 import "./globals.css";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
 export const metadata = {
 	title: "Booking Reservation App",
@@ -16,19 +18,13 @@ export default function RootLayout({
 			<body className="bg-gray-50 text-gray-900">
 				<Providers>
 					<div className="min-h-screen flex flex-col">
-						<header className="border-b bg-white">
-							<div className="container mx-auto px-4 py-4 font-semibold">
-								Booking App
-							</div>
-						</header>
+						<Header />
 
 						<main className="flex-1 container mx-auto px-4 py-6">
 							{children}
 						</main>
 
-						<footer className="border-t bg-white text-sm text-center py-4">
-							© {new Date().getFullYear()} Booking App
-						</footer>
+						<Footer />
 					</div>
 				</Providers>
 			</body>
