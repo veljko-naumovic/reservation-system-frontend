@@ -1,4 +1,4 @@
-import { Booking } from "@/app/types/booking";
+import { Booking } from "@/types/booking";
 import { NextResponse } from "next/server";
 
 let bookings: Booking[] = [];

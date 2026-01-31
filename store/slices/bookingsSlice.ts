@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getBookings, deleteBooking } from "@/lib/api";
-import { Booking } from "@/app/types/booking";
+import { Booking } from "@/types/booking";
 
 interface BookingsState {
 	items: Booking[];

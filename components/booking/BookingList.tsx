@@ -1,8 +1,8 @@
 "use client";
 
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { fetchBookings } from "@/store/slices/bookingsSlice";
 import { useEffect } from "react";
-import { fetchBookings } from "@/app/store/slices/bookingsSlice";
-import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
 
 export default function BookingsPage() {
 	const dispatch = useAppDispatch();
