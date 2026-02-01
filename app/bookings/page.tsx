@@ -7,6 +7,7 @@ import { formatDate, getDuration } from "@/lib/date";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchBookings } from "@/store/slices/bookingsSlice";
 import BookingsSkeleton from "@/components/skeletons/BookingsSkeleton";
+import BookingCard from "@/components/booking/BookingCard";
 
 function statusStyles(status: string) {
 	switch (status) {
@@ -61,48 +62,7 @@ export default function BookingsPage() {
 			{/* List */}
 			<ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 				{items.map((b) => (
-					<li
-						key={b.id}
-						className="
-							rounded-lg border bg-white p-4
-							transition-all duration-150 ease-out
-							hover:shadow-md hover:-translate-y-0.5"
-					>
-						<div className="space-y-2">
-							<Link
-								href={`/bookings/${b.id}`}
-								className="text-lg font-medium transition-colors duration-150 hover:underline"
-							>
-								{b.title}
-							</Link>
-
-							<div className="text-sm text-gray-600">
-								{b.guestName}
-							</div>
-
-							<div className="text-sm text-gray-500">
-								{formatDate(b.dateFrom)} →{" "}
-								{formatDate(b.dateTo)}
-								<span className="ml-1 text-gray-400">
-									({getDuration(b.dateFrom, b.dateTo)} nights)
-								</span>
-							</div>
-						</div>
-
-						<div className="mt-4 flex items-center justify-between">
-							<span
-								className={`text-xs px-2 py-1 rounded-full transition-colors duration-150 ${statusStyles(
-									b.status,
-								)}`}
-							>
-								{b.status}
-							</span>
-
-							<span className="text-xs text-gray-400">
-								Created {formatDate(b.createdAt)}
-							</span>
-						</div>
-					</li>
+					<BookingCard key={b.id} booking={b} />
 				))}
 			</ul>
 		</section>
