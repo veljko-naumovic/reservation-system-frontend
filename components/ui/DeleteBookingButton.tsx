@@ -4,9 +4,9 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAppDispatch } from "@/store/hooks";
 import { removeOptimistic, restoreBooking } from "@/store/slices/bookingsSlice";
-import { deleteBooking } from "@/lib/api";
 import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
+import { deleteBooking } from "@/lib/api.client";
 
 interface Props {
 	booking: any;
@@ -75,7 +75,7 @@ export default function DeleteBookingButton({ booking }: Props) {
 
 				<div className="flex justify-end gap-3">
 					<Button
-						variant="ghost"
+						variant="secondary"
 						onClick={() => setOpen(false)}
 						disabled={isDeleting}
 					>

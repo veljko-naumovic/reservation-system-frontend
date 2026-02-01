@@ -4,30 +4,27 @@ import { useState } from "react";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 
-interface Props {
-	onSubmit: (data: {
-		title: string;
-		guestName: string;
-		dateFrom: string;
-		dateTo: string;
-	}) => void;
+export interface BookingFormData {
+	title: string;
+	guestName: string;
+	dateFrom: string;
+	dateTo: string;
 }
 
-export default function BookingForm({ onSubmit }: Props) {
-	const [title, setTitle] = useState("");
-	const [guestName, setGuestName] = useState("");
-	const [dateFrom, setDateFrom] = useState("");
-	const [dateTo, setDateTo] = useState("");
+interface Props {
+	initialValues?: BookingFormData;
+	onSubmit: (data: BookingFormData) => void;
+}
+
+export default function BookingForm({ initialValues, onSubmit }: Props) {
+	const [title, setTitle] = useState(initialValues?.title ?? "");
+	const [guestName, setGuestName] = useState(initialValues?.guestName ?? "");
+	const [dateFrom, setDateFrom] = useState(initialValues?.dateFrom ?? "");
+	const [dateTo, setDateTo] = useState(initialValues?.dateTo ?? "");
 
 	function handleSubmit(e: React.FormEvent) {
 		e.preventDefault();
-
-		onSubmit({
-			title,
-			guestName,
-			dateFrom,
-			dateTo,
-		});
+		onSubmit({ title, guestName, dateFrom, dateTo });
 	}
 
 	return (
@@ -53,7 +50,6 @@ export default function BookingForm({ onSubmit }: Props) {
 					onChange={(e) => setDateFrom(e.target.value)}
 					required
 				/>
-
 				<Input
 					type="date"
 					value={dateTo}
@@ -62,7 +58,9 @@ export default function BookingForm({ onSubmit }: Props) {
 				/>
 			</div>
 
-			<Button type="submit">Create booking</Button>
+			<Button type="submit">
+				{initialValues ? "Save changes" : "Create booking"}
+			</Button>
 		</form>
 	);
 }

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getBookings, deleteBooking } from "@/lib/api";
 import { Booking } from "@/types/booking";
+import { deleteBooking, getBookings } from "@/lib/api.client";
 
 interface BookingsState {
 	items: Booking[];
@@ -31,7 +31,6 @@ const bookingsSlice = createSlice({
 	initialState,
 	reducers: {
 		removeOptimistic: (state, action) => {
-			console.log("OPTIMISTIC REMOVE", action.payload);
 			state.items = state.items.filter((b) => b.id !== action.payload);
 		},
 		restoreBooking: (state, action) => {
@@ -55,6 +54,11 @@ const bookingsSlice = createSlice({
 			})
 
 			// DELETE
+
+			.addCase(removeBooking.fulfilled, (state) => {
+				state.error = null;
+			})
+
 			.addCase(removeBooking.rejected, (state) => {
 				state.error = "Delete failed";
 			});

@@ -1,5 +1,6 @@
+import Button from "@/components/ui/Button";
 import DeleteBookingButton from "@/components/ui/DeleteBookingButton";
-import { getBookingById } from "@/lib/api";
+import { getBookingById } from "@/lib/api.server";
 import { formatDate, getDuration } from "@/lib/date";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -115,7 +116,11 @@ export default async function BookingDetailsPage({ params }: Props) {
 					</span>
 				</div>
 
-				<div className="flex justify-end">
+				<div className="flex justify-end gap-2">
+					<Link href={`/bookings/${booking.id}/edit`}>
+						<Button variant="secondary">Edit</Button>
+					</Link>
+
 					<DeleteBookingButton booking={booking} />
 				</div>
 			</div>

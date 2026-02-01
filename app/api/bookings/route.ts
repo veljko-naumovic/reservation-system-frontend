@@ -40,9 +40,21 @@ export async function DELETE(request: Request) {
 	const { searchParams } = new URL(request.url);
 	const id = searchParams.get("id");
 
+	if (!id) {
+		return NextResponse.json({ error: "Missing id" }, { status: 400 });
+	}
+
+	const before = bookings.length;
 	bookings = bookings.filter((b) => b.id !== id);
 
-	return NextResponse.json({ success: true });
+	if (bookings.length === before) {
+		return NextResponse.json(
+			{ error: "Booking not found" },
+			{ status: 404 },
+		);
+	}
+
+	return NextResponse.json({ id }); // vrati id (korisno za frontend)
 }
 
 export async function PUT(request: Request) {
