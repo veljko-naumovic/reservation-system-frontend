@@ -6,6 +6,7 @@ import Link from "next/link";
 import { formatDate, getDuration } from "@/lib/date";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchBookings } from "@/store/slices/bookingsSlice";
+import BookingsSkeleton from "@/components/skeletons/BookingsSkeleton";
 
 function statusStyles(status: string) {
 	switch (status) {
@@ -27,7 +28,7 @@ export default function BookingsPage() {
 	}, [dispatch]);
 
 	if (loading) {
-		return <div className="text-gray-500 py-10">Loading bookings...</div>;
+		return <BookingsSkeleton />;
 	}
 
 	if (error) {
