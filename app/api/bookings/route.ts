@@ -44,3 +44,17 @@ export async function DELETE(request: Request) {
 
 	return NextResponse.json({ success: true });
 }
+
+export async function PUT(request: Request) {
+	const body = await request.json();
+	const { searchParams } = new URL(request.url);
+	const id = searchParams.get("id");
+
+	if (!id) {
+		return NextResponse.json({ error: "Missing id" }, { status: 400 });
+	}
+
+	bookings = bookings.map((b) => (b.id === id ? { ...b, ...body } : b));
+
+	return NextResponse.json({ success: true });
+}
