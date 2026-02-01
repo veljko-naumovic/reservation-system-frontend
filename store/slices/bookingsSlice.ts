@@ -10,7 +10,7 @@ interface BookingsState {
 
 const initialState: BookingsState = {
 	items: [],
-	loading: false,
+	loading: true,
 	error: null,
 };
 
@@ -40,10 +40,21 @@ const bookingsSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder
+			// FETCH
+			.addCase(fetchBookings.pending, (state) => {
+				state.loading = true;
+				state.error = null;
+			})
 			.addCase(fetchBookings.fulfilled, (state, action) => {
 				state.items = action.payload;
 				state.loading = false;
 			})
+			.addCase(fetchBookings.rejected, (state) => {
+				state.loading = false;
+				state.error = "Failed to load bookings";
+			})
+
+			// DELETE
 			.addCase(removeBooking.rejected, (state) => {
 				state.error = "Delete failed";
 			});
