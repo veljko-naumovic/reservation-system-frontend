@@ -1,6 +1,8 @@
 import DeleteBookingButton from "@/components/ui/DeleteBookingButton";
 import { getBookingById } from "@/lib/api";
 import { formatDate, getDuration } from "@/lib/date";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 
 interface Props {
 	params: Promise<{ id: string }>;
@@ -21,11 +23,21 @@ export default async function BookingDetailsPage({ params }: Props) {
 	const { id } = await params;
 	const booking = await getBookingById(id);
 
+	if (!booking) {
+		notFound();
+	}
+
 	return (
 		<div className="max-w-2xl mx-auto">
-			{/* Card */}
+			<Link
+				href="/bookings"
+				className="mb-4 inline-block text-sm text-gray-500
+						   transition-colors duration-150
+						 hover:text-gray-900 hover:underline"
+			>
+				← Back to bookings
+			</Link>
 			<div className="rounded-xl border bg-white p-6 space-y-6">
-				{/* Header */}
 				<div className="flex items-start justify-between">
 					<div>
 						<h1 className="text-2xl font-semibold tracking-tight">
@@ -66,7 +78,6 @@ export default async function BookingDetailsPage({ params }: Props) {
 					</div>
 				</div>
 
-				{/* Info grid */}
 				<div className="grid gap-4 sm:grid-cols-2">
 					<div>
 						<p className="text-xs uppercase text-gray-400">Guest</p>
@@ -97,7 +108,6 @@ export default async function BookingDetailsPage({ params }: Props) {
 					</div>
 				</div>
 
-				{/* Duration */}
 				<div className="rounded-lg bg-gray-50 p-4 text-sm text-gray-600">
 					Stay duration:{" "}
 					<span className="font-medium text-gray-900">
@@ -105,7 +115,6 @@ export default async function BookingDetailsPage({ params }: Props) {
 					</span>
 				</div>
 
-				{/* Actions */}
 				<div className="flex justify-end">
 					<DeleteBookingButton booking={booking} />
 				</div>

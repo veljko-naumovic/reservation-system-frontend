@@ -20,6 +20,13 @@ export default function Header() {
 					</Link>
 
 					<Link
+						href="/about"
+						className="hover:text-gray-900 transition-colors"
+					>
+						About
+					</Link>
+
+					<Link
 						href="/create-booking"
 						className="hover:text-gray-900 transition-colors"
 					>

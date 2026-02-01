@@ -1,0 +1,20 @@
+[
+	{
+		"id": "1",
+		"title": "Hotel Aurora",
+		"guestName": "John Doe",
+		"dateFrom": "2026-03-10",
+		"dateTo": "2026-03-12",
+		"status": "confirmed",
+		"createdAt": "2026-01-01T10:00:00.000Z"
+	},
+	{
+		"id": "2",
+		"title": "Sea View Apartment",
+		"guestName": "Ana Petrović",
+		"dateFrom": "2026-04-01",
+		"dateTo": "2026-04-05",
+		"status": "pending",
+		"createdAt": "2026-01-02T12:00:00.000Z"
+	}
+]

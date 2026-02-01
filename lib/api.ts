@@ -1,4 +1,4 @@
-import { Booking } from "../app/types/booking";
+import { Booking } from "@/types/booking";
 
 export async function getBookings(): Promise<Booking[]> {
 	const res = await fetch("http://localhost:3000/api/bookings", {
@@ -28,16 +28,16 @@ export async function createBooking(
 	return res.json();
 }
 
-export async function getBookingById(id: string): Promise<Booking> {
+export async function getBookingById(id: string) {
 	const res = await fetch(`http://localhost:3000/api/bookings?id=${id}`, {
 		cache: "no-store",
 	});
 
 	if (!res.ok) {
-		throw new Error("Booking not found");
+		return null;
 	}
-	const data: Booking[] = await res.json();
-	return data[0];
+
+	return res.json();
 }
 
 export async function deleteBooking(id: string) {
