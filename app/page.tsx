@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function HomePage() {
+const HomePage = () => {
 	return (
 		<section className="space-y-6">
 			<h1 className="text-3xl font-bold">Booking & Reservation App</h1>
@@ -27,4 +27,6 @@ export default function HomePage() {
 			</div>
 		</section>
 	);
-}
+};
+
+export default HomePage;

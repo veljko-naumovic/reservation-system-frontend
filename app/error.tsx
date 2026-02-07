@@ -5,7 +5,7 @@ interface Props {
 	reset: () => void;
 }
 
-export default function GlobalError({ error, reset }: Props) {
+const GlobalError = ({ error, reset }: Props) => {
 	return (
 		<div className="flex min-h-[60vh] flex-col items-center justify-center text-center space-y-4">
 			<h1 className="text-2xl font-semibold">Something went wrong</h1>
@@ -26,4 +26,6 @@ export default function GlobalError({ error, reset }: Props) {
 			</button>
 		</div>
 	);
-}
+};
+
+export default GlobalError;

@@ -2,7 +2,7 @@ export const metadata = {
 	title: "About | Booking App",
 };
 
-export default function AboutPage() {
+const AboutPage = () => {
 	return (
 		<section className="max-w-2xl space-y-4">
 			<h1 className="text-2xl font-semibold">About this app</h1>
@@ -18,4 +18,6 @@ export default function AboutPage() {
 			</p>
 		</section>
 	);
-}
+};
+
+export default AboutPage;

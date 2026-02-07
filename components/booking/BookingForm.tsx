@@ -12,55 +12,127 @@ export interface BookingFormData {
 }
 
 interface Props {
-	initialValues?: BookingFormData;
 	onSubmit: (data: BookingFormData) => void;
+	initialData?: Partial<BookingFormData>; // za edit
 }
 
-export default function BookingForm({ initialValues, onSubmit }: Props) {
-	const [title, setTitle] = useState(initialValues?.title ?? "");
-	const [guestName, setGuestName] = useState(initialValues?.guestName ?? "");
-	const [dateFrom, setDateFrom] = useState(initialValues?.dateFrom ?? "");
-	const [dateTo, setDateTo] = useState(initialValues?.dateTo ?? "");
+type Errors = Partial<Record<keyof BookingFormData, string>>;
 
-	function handleSubmit(e: React.FormEvent) {
+const BookingForm = ({ onSubmit, initialData }: Props) => {
+	const [title, setTitle] = useState(initialData?.title ?? "");
+	const [guestName, setGuestName] = useState(initialData?.guestName ?? "");
+	const [dateFrom, setDateFrom] = useState(initialData?.dateFrom ?? "");
+	const [dateTo, setDateTo] = useState(initialData?.dateTo ?? "");
+
+	const [errors, setErrors] = useState<Errors>({});
+
+	const validate = (): boolean => {
+		const nextErrors: Errors = {};
+
+		if (!title.trim()) {
+			nextErrors.title = "Title is required";
+		}
+
+		if (!guestName.trim()) {
+			nextErrors.guestName = "Guest name is required";
+		}
+
+		if (!dateFrom) {
+			nextErrors.dateFrom = "Start date is required";
+		}
+
+		if (!dateTo) {
+			nextErrors.dateTo = "End date is required";
+		}
+
+		if (dateFrom && dateTo && dateFrom > dateTo) {
+			nextErrors.dateTo = "End date must be after start date";
+		}
+
+		setErrors(nextErrors);
+		return Object.keys(nextErrors).length === 0;
+	};
+
+	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		onSubmit({ title, guestName, dateFrom, dateTo });
-	}
+
+		if (!validate()) return;
+
+		onSubmit({
+			title,
+			guestName,
+			dateFrom,
+			dateTo,
+		});
+	};
+
+	const isValid =
+		title && guestName && dateFrom && dateTo && dateFrom <= dateTo;
 
 	return (
-		<form onSubmit={handleSubmit} className="space-y-4 max-w-md">
+		<form onSubmit={handleSubmit} className="space-y-6">
 			<Input
-				placeholder="Booking title"
+				label="Booking title"
 				value={title}
-				onChange={(e) => setTitle(e.target.value)}
+				onChange={(e) => {
+					setTitle(e.target.value);
+					setErrors((e) => ({ ...e, title: undefined }));
+				}}
+				error={errors.title}
 				required
 			/>
 
 			<Input
-				placeholder="Guest name"
+				label="Guest name"
 				value={guestName}
-				onChange={(e) => setGuestName(e.target.value)}
+				onChange={(e) => {
+					setGuestName(e.target.value);
+					setErrors((e) => ({
+						...e,
+						guestName: undefined,
+					}));
+				}}
+				error={errors.guestName}
 				required
 			/>
 
 			<div className="grid grid-cols-2 gap-4">
 				<Input
+					label="From"
 					type="date"
 					value={dateFrom}
-					onChange={(e) => setDateFrom(e.target.value)}
+					onChange={(e) => {
+						setDateFrom(e.target.value);
+						setErrors((e) => ({
+							...e,
+							dateFrom: undefined,
+						}));
+					}}
+					error={errors.dateFrom}
 					required
 				/>
+
 				<Input
+					label="To"
 					type="date"
 					value={dateTo}
-					onChange={(e) => setDateTo(e.target.value)}
+					onChange={(e) => {
+						setDateTo(e.target.value);
+						setErrors((e) => ({
+							...e,
+							dateTo: undefined,
+						}));
+					}}
+					error={errors.dateTo}
 					required
 				/>
 			</div>
 
-			<Button type="submit">
-				{initialValues ? "Save changes" : "Create booking"}
+			<Button type="submit" disabled={!isValid}>
+				Save booking
 			</Button>
 		</form>
 	);
-}
+};
+
+export default BookingForm;

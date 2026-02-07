@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function NotFoundPage() {
+const NotFoundPage = () => {
 	return (
 		<div className="flex min-h-[60vh] flex-col items-center justify-center text-center space-y-4">
 			<h1 className="text-2xl font-semibold">Page not found</h1>
@@ -21,4 +21,6 @@ export default function NotFoundPage() {
 			</Link>
 		</div>
 	);
-}
+};
+
+export default NotFoundPage;

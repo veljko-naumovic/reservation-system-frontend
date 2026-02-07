@@ -9,7 +9,7 @@ interface Props {
 	params: Promise<{ id: string }>;
 }
 
-export default function EditBookingPage({ params }: Props) {
+const EditBookingPage = ({ params }: Props) => {
 	const { id } = use(params);
 	const router = useRouter();
 
@@ -17,15 +17,15 @@ export default function EditBookingPage({ params }: Props) {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		async function load() {
+		const load = async () => {
 			const data = await getBookingById(id);
 			setBooking(data);
 			setLoading(false);
-		}
+		};
 		load();
 	}, [id]);
 
-	async function handleUpdate(data: BookingFormData) {
+	const handleUpdate = async (data: BookingFormData) => {
 		if (data.dateFrom > data.dateTo) {
 			alert("End date must be after start date");
 			return;
@@ -33,7 +33,7 @@ export default function EditBookingPage({ params }: Props) {
 
 		await updateBooking(id, data);
 		router.push(`/bookings/${id}`);
-	}
+	};
 
 	if (loading) {
 		return <div className="py-10 text-gray-500">Loading…</div>;
@@ -44,7 +44,7 @@ export default function EditBookingPage({ params }: Props) {
 			<h1 className="text-2xl font-semibold">Edit booking</h1>
 
 			<BookingForm
-				initialValues={{
+				initialData={{
 					title: booking.title,
 					guestName: booking.guestName,
 					dateFrom: booking.dateFrom,
@@ -54,4 +54,6 @@ export default function EditBookingPage({ params }: Props) {
 			/>
 		</section>
 	);
-}
+};
+
+export default EditBookingPage;

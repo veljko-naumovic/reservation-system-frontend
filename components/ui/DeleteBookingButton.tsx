@@ -12,14 +12,14 @@ interface Props {
 	booking: any;
 }
 
-export default function DeleteBookingButton({ booking }: Props) {
+const DeleteBookingButton = ({ booking }: Props) => {
 	const [isDeleting, setIsDeleting] = useState(false);
 	const [open, setOpen] = useState(false);
 
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 
-	async function confirmDelete() {
+	const confirmDelete = async () => {
 		setIsDeleting(true);
 
 		// optimistic update
@@ -35,7 +35,7 @@ export default function DeleteBookingButton({ booking }: Props) {
 			setOpen(false);
 			alert("Delete failed. Booking restored.");
 		}
-	}
+	};
 
 	return (
 		<>
@@ -93,4 +93,6 @@ export default function DeleteBookingButton({ booking }: Props) {
 			</Modal>
 		</>
 	);
-}
+};
+
+export default DeleteBookingButton;

@@ -1,4 +1,4 @@
-export default function BookingsSkeleton() {
+const BookingsSkeleton = () => {
 	return (
 		<section className="space-y-6">
 			{/* Header skeleton */}
@@ -27,4 +27,6 @@ export default function BookingsSkeleton() {
 			</ul>
 		</section>
 	);
-}
+};
+
+export default BookingsSkeleton;

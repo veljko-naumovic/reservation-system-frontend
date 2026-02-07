@@ -7,7 +7,7 @@ interface Props {
 	children: React.ReactNode;
 }
 
-export default function Modal({ open, onClose, title, children }: Props) {
+const Modal = ({ open, onClose, title, children }: Props) => {
 	if (!open) return null;
 
 	return (
@@ -23,4 +23,6 @@ export default function Modal({ open, onClose, title, children }: Props) {
 			</div>
 		</div>
 	);
-}
+};
+
+export default Modal;

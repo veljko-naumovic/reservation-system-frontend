@@ -8,11 +8,7 @@ export const metadata = {
 	description: "Simple booking app built with Next.js",
 };
 
-export default function RootLayout({
-	children,
-}: {
-	children: React.ReactNode;
-}) {
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<html lang="en">
 			<body className="bg-gray-50 text-gray-900">
@@ -28,4 +24,6 @@ export default function RootLayout({
 			</body>
 		</html>
 	);
-}
+};
+
+export default RootLayout;

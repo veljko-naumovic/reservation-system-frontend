@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchBookings } from "@/store/slices/bookingsSlice";
 import { useEffect } from "react";
 
-export default function BookingsPage() {
+const BookingsPage = () => {
 	const dispatch = useAppDispatch();
 	const { items, loading } = useAppSelector((s) => s.bookings);
 
@@ -21,4 +21,6 @@ export default function BookingsPage() {
 			))}
 		</ul>
 	);
-}
+};
+
+export default BookingsPage;

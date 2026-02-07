@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Booking } from "@/types/booking";
 import { formatDate, getDuration } from "@/lib/date";
 
-function statusStyles(status: Booking["status"]) {
+const statusStyles = (status: Booking["status"]) => {
 	switch (status) {
 		case "confirmed":
 			return "bg-green-100 text-green-700";
@@ -11,13 +11,13 @@ function statusStyles(status: Booking["status"]) {
 		default:
 			return "bg-yellow-100 text-yellow-700";
 	}
-}
+};
 
 interface Props {
 	booking: Booking;
 }
 
-export default function BookingCard({ booking }: Props) {
+const BookingCard = ({ booking }: Props) => {
 	return (
 		<li
 			className="
@@ -60,4 +60,6 @@ export default function BookingCard({ booking }: Props) {
 			</div>
 		</li>
 	);
-}
+};
+
+export default BookingCard;

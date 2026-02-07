@@ -8,7 +8,7 @@ let bookings: Booking[] = bookingsData.map((b) => ({
 	status: b.status as Booking["status"],
 }));
 
-export async function GET(request: Request) {
+export const GET = async (request: Request) => {
 	const { searchParams } = new URL(request.url);
 	const id = searchParams.get("id");
 
@@ -20,8 +20,8 @@ export async function GET(request: Request) {
 
 	// ALL BOOKINGS
 	return NextResponse.json(bookings);
-}
-export async function POST(req: Request) {
+};
+export const POST = async (req: Request) => {
 	const body = await req.json();
 
 	const newBooking: Booking = {
@@ -34,9 +34,9 @@ export async function POST(req: Request) {
 	bookings.push(newBooking);
 
 	return NextResponse.json(newBooking, { status: 201 });
-}
+};
 
-export async function DELETE(request: Request) {
+export const DELETE = async (request: Request) => {
 	const { searchParams } = new URL(request.url);
 	const id = searchParams.get("id");
 
@@ -55,9 +55,9 @@ export async function DELETE(request: Request) {
 	}
 
 	return NextResponse.json({ id }); // vrati id (korisno za frontend)
-}
+};
 
-export async function PUT(request: Request) {
+export const PUT = async (request: Request) => {
 	const body = await request.json();
 	const { searchParams } = new URL(request.url);
 	const id = searchParams.get("id");
@@ -69,4 +69,4 @@ export async function PUT(request: Request) {
 	bookings = bookings.map((b) => (b.id === id ? { ...b, ...body } : b));
 
 	return NextResponse.json({ success: true });
-}
+};

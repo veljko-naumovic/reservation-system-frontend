@@ -5,7 +5,7 @@ interface Props {
 	reset: () => void;
 }
 
-export default function Error({ error, reset }: Props) {
+const Error = ({ error, reset }: Props) => {
 	return (
 		<div className="space-y-4">
 			<h2 className="text-xl font-semibold text-red-600">
@@ -22,4 +22,6 @@ export default function Error({ error, reset }: Props) {
 			</button>
 		</div>
 	);
-}
+};
+
+export default Error;

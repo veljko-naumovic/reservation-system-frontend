@@ -9,7 +9,7 @@ interface Props {
 	params: Promise<{ id: string }>;
 }
 
-function statusStyles(status: string) {
+const statusStyles = (status: string) => {
 	switch (status) {
 		case "confirmed":
 			return "bg-green-100 text-green-700";
@@ -18,9 +18,9 @@ function statusStyles(status: string) {
 		default:
 			return "bg-yellow-100 text-yellow-700";
 	}
-}
+};
 
-export default async function BookingDetailsPage({ params }: Props) {
+const BookingDetailsPage = async ({ params }: Props) => {
 	const { id } = await params;
 	const booking = await getBookingById(id);
 
@@ -32,7 +32,7 @@ export default async function BookingDetailsPage({ params }: Props) {
 		<div className="max-w-2xl mx-auto">
 			<Link
 				href="/bookings"
-				className="mb-4 inline-block text-sm text-gray-500
+				className="mb-4 inline-block text-base text-gray-500
 						   transition-colors duration-150
 						 hover:text-gray-900 hover:underline"
 			>
@@ -44,7 +44,7 @@ export default async function BookingDetailsPage({ params }: Props) {
 						<h1 className="text-2xl font-semibold tracking-tight">
 							{booking.title}
 						</h1>
-						<p className="text-sm text-gray-500 mt-1">
+						<p className="text-base text-gray-500 mt-1">
 							Booking details
 						</p>
 					</div>
@@ -109,7 +109,7 @@ export default async function BookingDetailsPage({ params }: Props) {
 					</div>
 				</div>
 
-				<div className="rounded-lg bg-gray-50 p-4 text-sm text-gray-600">
+				<div className="rounded-lg bg-gray-50 p-4 text-base text-gray-600">
 					Stay duration:{" "}
 					<span className="font-medium text-gray-900">
 						{getDuration(booking.dateFrom, booking.dateTo)} nights
@@ -126,4 +126,6 @@ export default async function BookingDetailsPage({ params }: Props) {
 			</div>
 		</div>
 	);
-}
+};
+
+export default BookingDetailsPage;
