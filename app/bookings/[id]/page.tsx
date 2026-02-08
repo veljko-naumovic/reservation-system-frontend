@@ -1,27 +1,17 @@
-import Button from "@/components/ui/Button";
-import DeleteBookingButton from "@/components/ui/DeleteBookingButton";
-import { getBookingById } from "@/lib/api.server";
-import { formatDate, getDuration } from "@/lib/date";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import Button from "@/components/ui/Button";
+import DeleteBookingButton from "@/components/ui/DeleteBookingButton";
+import BookingStatusSelect from "@/components/booking/BookingStatusSelect";
+import { getBookingById } from "@/lib/api.server";
+import { formatDate, getDuration } from "@/lib/date";
 
 interface Props {
 	params: Promise<{ id: string }>;
 }
-
-const statusStyles = (status: string) => {
-	switch (status) {
-		case "confirmed":
-			return "bg-green-100 text-green-700";
-		case "cancelled":
-			return "bg-red-100 text-red-700";
-		default:
-			return "bg-yellow-100 text-yellow-700";
-	}
-};
-
 const BookingDetailsPage = async ({ params }: Props) => {
 	const { id } = await params;
+
 	const booking = await getBookingById(id);
 
 	if (!booking) {
@@ -29,16 +19,16 @@ const BookingDetailsPage = async ({ params }: Props) => {
 	}
 
 	return (
-		<div className="max-w-2xl mx-auto">
+		<div className="max-w-2xl mx-auto space-y-6">
 			<Link
 				href="/bookings"
-				className="mb-4 inline-block text-base text-gray-500
-						   transition-colors duration-150
-						 hover:text-gray-900 hover:underline"
+				className="inline-block text-base text-gray-500 hover:underline"
 			>
 				← Back to bookings
 			</Link>
+
 			<div className="rounded-xl border bg-white p-6 space-y-6">
+				{/* Header */}
 				<div className="flex items-start justify-between">
 					<div>
 						<h1 className="text-2xl font-semibold tracking-tight">
@@ -49,36 +39,13 @@ const BookingDetailsPage = async ({ params }: Props) => {
 						</p>
 					</div>
 
-					<div className="relative group">
-						<span
-							className={`text-xs px-2 py-1 rounded-full cursor-help ${statusStyles(
-								booking.status,
-							)}`}
-						>
-							{booking.status}
-						</span>
-
-						<div
-							className="
-									pointer-events-none
-									absolute left-1/2 top-full z-10 mt-2
-									-translate-x-1/2
-									whitespace-nowrap
-									rounded bg-gray-900 px-2 py-1
-									text-xs text-white
-									opacity-0 group-hover:opacity-100
-									transition"
-						>
-							{booking.status === "pending" &&
-								"Waiting for confirmation"}
-							{booking.status === "confirmed" &&
-								"Booking is confirmed"}
-							{booking.status === "cancelled" &&
-								"Booking was cancelled"}
-						</div>
-					</div>
+					<BookingStatusSelect
+						id={booking.id}
+						initialStatus={booking.status}
+					/>
 				</div>
 
+				{/* Info */}
 				<div className="grid gap-4 sm:grid-cols-2">
 					<div>
 						<p className="text-xs uppercase text-gray-400">Guest</p>
@@ -109,6 +76,7 @@ const BookingDetailsPage = async ({ params }: Props) => {
 					</div>
 				</div>
 
+				{/* Duration */}
 				<div className="rounded-lg bg-gray-50 p-4 text-base text-gray-600">
 					Stay duration:{" "}
 					<span className="font-medium text-gray-900">
@@ -116,6 +84,7 @@ const BookingDetailsPage = async ({ params }: Props) => {
 					</span>
 				</div>
 
+				{/* Actions */}
 				<div className="flex justify-end gap-2">
 					<Link href={`/bookings/${booking.id}/edit`}>
 						<Button variant="secondary">Edit</Button>

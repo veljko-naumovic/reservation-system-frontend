@@ -12,13 +12,13 @@ export const GET = async (request: Request) => {
 	const { searchParams } = new URL(request.url);
 	const id = searchParams.get("id");
 
-	// SINGLE BOOKING
+	// Single booking
 	if (id) {
 		const booking = bookings.find((b) => b.id === id);
 		return NextResponse.json(booking ?? null);
 	}
 
-	// ALL BOOKINGS
+	//All bookings
 	return NextResponse.json(bookings);
 };
 export const POST = async (req: Request) => {
@@ -54,7 +54,7 @@ export const DELETE = async (request: Request) => {
 		);
 	}
 
-	return NextResponse.json({ id }); // vrati id (korisno za frontend)
+	return NextResponse.json({ id }); // retrun id
 };
 
 export const PUT = async (request: Request) => {
@@ -69,4 +69,19 @@ export const PUT = async (request: Request) => {
 	bookings = bookings.map((b) => (b.id === id ? { ...b, ...body } : b));
 
 	return NextResponse.json({ success: true });
+};
+
+export const PATCH = async (request: Request) => {
+	const { searchParams } = new URL(request.url);
+	const id = searchParams.get("id");
+	const body = await request.json();
+
+	const booking = bookings.find((b) => b.id === id);
+	if (!booking) {
+		return NextResponse.json(null, { status: 404 });
+	}
+
+	booking.status = body.status;
+
+	return NextResponse.json(booking);
 };

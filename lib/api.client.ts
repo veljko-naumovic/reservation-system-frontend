@@ -1,7 +1,7 @@
 import { Booking } from "@/types/booking";
 import { BookingFormData } from "@/components/booking/BookingForm";
 
-// ✅ GET ALL
+// Get all
 export const getBookings = async (): Promise<Booking[]> => {
 	const res = await fetch("/api/bookings", {
 		cache: "no-store",
@@ -14,7 +14,7 @@ export const getBookings = async (): Promise<Booking[]> => {
 	return res.json();
 };
 
-// ✅ GET ONE
+// Get one
 export const getBookingById = async (id: string): Promise<Booking | null> => {
 	const res = await fetch(`/api/bookings?id=${id}`, {
 		cache: "no-store",
@@ -24,7 +24,7 @@ export const getBookingById = async (id: string): Promise<Booking | null> => {
 	return res.json();
 };
 
-// ✅ CREATE
+// Create
 export const createBooking = async (
 	data: BookingFormData,
 ): Promise<Booking> => {
@@ -41,7 +41,7 @@ export const createBooking = async (
 	return res.json();
 };
 
-// ✅ UPDATE
+// Update booking
 export const updateBooking = async (
 	id: string,
 	data: BookingFormData,
@@ -59,7 +59,7 @@ export const updateBooking = async (
 	return res.json();
 };
 
-// ✅ DELETE
+// Delete
 export const deleteBooking = async (id: string): Promise<void> => {
 	const res = await fetch(`/api/bookings?id=${id}`, {
 		method: "DELETE",
@@ -68,4 +68,25 @@ export const deleteBooking = async (id: string): Promise<void> => {
 	if (!res.ok) {
 		throw new Error("Failed to delete booking");
 	}
+};
+
+// Update status
+
+export const updateBookingStatus = async (
+	id: string,
+	status: "pending" | "confirmed" | "cancelled",
+) => {
+	const res = await fetch(`/api/bookings?id=${id}`, {
+		method: "PATCH",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ status }),
+	});
+
+	if (!res.ok) {
+		throw new Error("Failed to update status");
+	}
+
+	return res.json();
 };

@@ -40,18 +40,23 @@ const EditBookingPage = ({ params }: Props) => {
 	}
 
 	return (
-		<section className="max-w-2xl mx-auto space-y-6">
-			<h1 className="text-2xl font-semibold">Edit booking</h1>
+		<section className="max-w-2xl mx-auto space-y-8">
+			<h1 className="text-2xl font-semibold tracking-tight">
+				Edit booking
+			</h1>
 
-			<BookingForm
-				initialData={{
-					title: booking.title,
-					guestName: booking.guestName,
-					dateFrom: booking.dateFrom,
-					dateTo: booking.dateTo,
-				}}
-				onSubmit={handleUpdate}
-			/>
+			{/* Card – ISTO kao Create */}
+			<div className="rounded-xl border bg-white p-6">
+				<BookingForm
+					initialData={{
+						title: booking.title,
+						guestName: booking.guestName,
+						dateFrom: booking.dateFrom,
+						dateTo: booking.dateTo,
+					}}
+					onSubmit={handleUpdate}
+				/>
+			</div>
 		</section>
 	);
 };

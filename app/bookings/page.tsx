@@ -6,11 +6,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { formatDate, getDuration } from "@/lib/date";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchBookings } from "@/store/slices/bookingsSlice";
+import { Booking } from "@/types/booking";
 
-type StatusFilter = "all" | "pending" | "confirmed" | "cancelled";
+type StatusFilter = "all" | Booking["status"];
 type SortOrder = "newest" | "oldest";
 
-const statusStyles = (status: string) => {
+const statusStyles = (status: Booking["status"]) => {
 	switch (status) {
 		case "confirmed":
 			return "bg-green-100 text-green-700";
@@ -76,6 +77,12 @@ const BookingsPage = () => {
 		});
 	};
 
+	const resetFilters = () => {
+		setStatusFilter("all");
+		setSortOrder("newest");
+		router.replace("/bookings", { scroll: false });
+	};
+
 	if (loading) {
 		return (
 			<div className="py-10 text-base text-gray-500">
@@ -111,7 +118,9 @@ const BookingsPage = () => {
 				</span>
 			</div>
 
+			{/* Filters */}
 			<div className="flex flex-wrap items-center gap-3">
+				{/* Status filter */}
 				<div className="relative">
 					<select
 						value={statusFilter}
@@ -122,16 +131,12 @@ const BookingsPage = () => {
 						}}
 						className="
 							appearance-none
-							border
-							rounded
-							px-3
-							py-2
-							pr-10
-							text-base
-							bg-white
+							border rounded
+							px-3 py-2 pr-10
+							text-base bg-white
 							focus:outline-none
-							focus:ring-2
-							focus:ring-blue-500"
+							focus:ring-2 focus:ring-blue-500
+						"
 					>
 						<option value="all">All statuses</option>
 						<option value="pending">Pending</option>
@@ -140,22 +145,11 @@ const BookingsPage = () => {
 					</select>
 
 					<span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="18"
-							height="18"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							strokeWidth="2"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-						>
-							<polyline points="6 9 12 15 18 9" />
-						</svg>
+						▼
 					</span>
 				</div>
 
+				{/* Sort */}
 				<div className="relative">
 					<select
 						value={sortOrder}
@@ -165,39 +159,37 @@ const BookingsPage = () => {
 							updateQuery(statusFilter, next);
 						}}
 						className="
-								appearance-none
-								border
-								rounded
-								px-3
-								py-2
-								pr-10
-								text-base
-								bg-white
-								focus:outline-none
-								focus:ring-2
-								focus:ring-blue-500"
+							appearance-none
+							border rounded
+							px-3 py-2 pr-10
+							text-base bg-white
+							focus:outline-none
+							focus:ring-2 focus:ring-blue-500
+						"
 					>
 						<option value="newest">Newest first</option>
 						<option value="oldest">Oldest first</option>
 					</select>
 
-					{/* Arrow */}
 					<span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="18"
-							height="18"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							strokeWidth="2"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-						>
-							<polyline points="6 9 12 15 18 9" />
-						</svg>
+						▼
 					</span>
 				</div>
+
+				{/* Reset */}
+				{isFiltered && (
+					<button
+						onClick={resetFilters}
+						className="
+							text-base text-gray-500
+							underline underline-offset-4
+							transition-colors duration-150
+							hover:text-gray-900
+						"
+					>
+						Reset
+					</button>
+				)}
 			</div>
 
 			{/* List */}

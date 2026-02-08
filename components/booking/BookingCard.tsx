@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Booking } from "@/types/booking";
 import { formatDate, getDuration } from "@/lib/date";
 
-const statusStyles = (status: Booking["status"]) => {
+const cardAccentStyles = (status: Booking["status"]) => {
 	switch (status) {
 		case "confirmed":
 			return "border-l-green-400";
@@ -13,6 +13,17 @@ const statusStyles = (status: Booking["status"]) => {
 	}
 };
 
+const badgeStyles = (status: Booking["status"]) => {
+	switch (status) {
+		case "confirmed":
+			return "bg-green-100 text-green-700";
+		case "cancelled":
+			return "bg-red-100 text-red-700";
+		default:
+			return "bg-yellow-100 text-yellow-700";
+	}
+};
+
 interface Props {
 	booking: Booking;
 }
@@ -20,16 +31,17 @@ interface Props {
 const BookingCard = ({ booking }: Props) => {
 	return (
 		<li
-			className="
-				rounded-lg border border-l-4 border-l-gray-200
-				bg-white p-4
+			className={`
+				rounded-lg border border-l-4 bg-white p-4
 				transition-all duration-150 ease-out
-				hover:shadow-md hover:-translate-y-0.5"
+				hover:shadow-md hover:-translate-y-0.5
+				${cardAccentStyles(booking.status)}
+			`}
 		>
 			<div className="space-y-2">
 				<Link
 					href={`/bookings/${booking.id}`}
-					className="text-lg font-medium transition-colors hover:underline"
+					className="text-lg font-medium hover:underline"
 				>
 					{booking.title}
 				</Link>
@@ -47,7 +59,7 @@ const BookingCard = ({ booking }: Props) => {
 
 			<div className="mt-4 flex items-center justify-between">
 				<span
-					className={`text-xs px-2 py-1 rounded-full transition-colors ${statusStyles(
+					className={`text-xs px-2 py-1 rounded-full ${badgeStyles(
 						booking.status,
 					)}`}
 				>
