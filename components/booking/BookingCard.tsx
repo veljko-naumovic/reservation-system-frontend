@@ -5,11 +5,11 @@ import { formatDate, getDuration } from "@/lib/date";
 const statusStyles = (status: Booking["status"]) => {
 	switch (status) {
 		case "confirmed":
-			return "bg-green-100 text-green-700";
+			return "border-l-green-400";
 		case "cancelled":
-			return "bg-red-100 text-red-700";
+			return "border-l-red-400";
 		default:
-			return "bg-yellow-100 text-yellow-700";
+			return "border-l-yellow-400";
 	}
 };
 
@@ -21,10 +21,10 @@ const BookingCard = ({ booking }: Props) => {
 	return (
 		<li
 			className="
-        rounded-lg border bg-white p-4
-        transition-all duration-150 ease-out
-        hover:shadow-md hover:-translate-y-0.5
-      "
+				rounded-lg border border-l-4 border-l-gray-200
+				bg-white p-4
+				transition-all duration-150 ease-out
+				hover:shadow-md hover:-translate-y-0.5"
 		>
 			<div className="space-y-2">
 				<Link
