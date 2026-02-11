@@ -1,5 +1,6 @@
 export const metadata = {
-	title: "About | Booking App",
+	title: "About",
+	description: "About booking app",
 };
 
 const AboutPage = () => {

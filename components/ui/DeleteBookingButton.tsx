@@ -28,7 +28,7 @@ const DeleteBookingButton = ({ booking }: Props) => {
 		try {
 			await deleteBooking(booking.id);
 			setOpen(false);
-			router.push("/bookings");
+			router.push("/bookings?deleted=1");
 		} catch {
 			dispatch(restoreBooking(booking));
 			setIsDeleting(false);

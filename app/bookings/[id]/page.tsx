@@ -5,6 +5,12 @@ import DeleteBookingButton from "@/components/ui/DeleteBookingButton";
 import BookingStatusSelect from "@/components/booking/BookingStatusSelect";
 import { getBookingById } from "@/lib/api.server";
 import { formatDate, getDuration } from "@/lib/date";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "Booking details",
+	description: "Details page of one booking",
+};
 
 interface Props {
 	params: Promise<{ id: string }>;
@@ -15,11 +21,33 @@ const BookingDetailsPage = async ({ params }: Props) => {
 	const booking = await getBookingById(id);
 
 	if (!booking) {
-		notFound();
+		return (
+			<div className="max-w-xl mx-auto space-y-6">
+				<Link
+					href="/bookings"
+					className="inline-block text-base text-gray-500 hover:underline"
+				>
+					← Back to bookings
+				</Link>
+
+				<div className="rounded-xl border bg-white p-6 text-center space-y-3">
+					<p className="text-xl font-medium">
+						This booking was deleted
+					</p>
+					<p className="text-base text-gray-500">
+						The booking you are trying to view no longer exists.
+					</p>
+
+					<Link href="/bookings">
+						<Button variant="secondary">Go to bookings</Button>
+					</Link>
+				</div>
+			</div>
+		);
 	}
 
 	return (
-		<div className="max-w-2xl mx-auto space-y-6">
+		<div className="max-w-xl mx-auto space-y-6">
 			<Link
 				href="/bookings"
 				className="inline-block text-base text-gray-500 hover:underline"
@@ -29,7 +57,7 @@ const BookingDetailsPage = async ({ params }: Props) => {
 
 			<div className="rounded-xl border bg-white p-6 space-y-6">
 				{/* Header */}
-				<div className="flex items-start justify-between">
+				<div className="flex items-start gap-6">
 					<div>
 						<h1 className="text-2xl font-semibold tracking-tight">
 							{booking.title}
@@ -39,10 +67,15 @@ const BookingDetailsPage = async ({ params }: Props) => {
 						</p>
 					</div>
 
-					<BookingStatusSelect
-						id={booking.id}
-						initialStatus={booking.status}
-					/>
+					<div className="ml-auto mt-1 text-right self-start">
+						<p className="text-xs uppercase text-gray-400 mb-1">
+							Status
+						</p>
+						<BookingStatusSelect
+							id={booking.id}
+							initialStatus={booking.status}
+						/>
+					</div>
 				</div>
 
 				{/* Info */}
@@ -85,7 +118,7 @@ const BookingDetailsPage = async ({ params }: Props) => {
 				</div>
 
 				{/* Actions */}
-				<div className="flex justify-end gap-2">
+				<div className="flex justify-end gap-2 pt-4 border-t">
 					<Link href={`/bookings/${booking.id}/edit`}>
 						<Button variant="secondary">Edit</Button>
 					</Link>

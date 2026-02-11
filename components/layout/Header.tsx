@@ -4,9 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 
-/**
- * Base nav link styles with animated underline (::after)
- */
 const navLink =
 	"relative px-1 text-base text-gray-700 \
    after:absolute after:left-0 after:-bottom-1 \
@@ -19,9 +16,8 @@ const navLink =
 
 const navLinkActive = "text-gray-900 after:scale-x-100";
 
-/**
- * Active route helper
- */
+// Active route helper
+
 const isActive = (pathname: string, href: string) => {
 	if (href === "/bookings") {
 		return pathname === "/bookings" || pathname.startsWith("/bookings/");

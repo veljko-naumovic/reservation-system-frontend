@@ -2,10 +2,21 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import "./globals.css";
 import Providers from "./Providers";
+import type { Metadata } from "next";
 
-export const metadata = {
-	title: "Booking Reservation App",
-	description: "Simple booking app built with Next.js",
+export const metadata: Metadata = {
+	title: {
+		default: "Booking App",
+		template: "%s · Booking App",
+	},
+	description:
+		"Simple booking and reservation app built with Next.js, TypeScript and Tailwind CSS.",
+	applicationName: "Booking App",
+	metadataBase: new URL("http://localhost:3000"), // ili tvoj domen
+	openGraph: {
+		type: "website",
+		siteName: "Booking App",
+	},
 };
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {

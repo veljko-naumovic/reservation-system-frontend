@@ -7,6 +7,7 @@ import { formatDate, getDuration } from "@/lib/date";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchBookings } from "@/store/slices/bookingsSlice";
 import { Booking } from "@/types/booking";
+import Toast from "@/components/ui/Toast";
 
 type StatusFilter = "all" | Booking["status"];
 type SortOrder = "newest" | "oldest";
@@ -33,6 +34,10 @@ const BookingsPage = () => {
 	const [statusFilter, setStatusFilter] = useState<StatusFilter>(
 		(searchParams.get("status") as StatusFilter) ?? "all",
 	);
+
+	const deleted = searchParams.get("deleted");
+
+	const [showToast, setShowToast] = useState(!!deleted);
 
 	const [sortOrder, setSortOrder] = useState<SortOrder>(
 		(searchParams.get("sort") as SortOrder) ?? "newest",
@@ -83,53 +88,59 @@ const BookingsPage = () => {
 		router.replace("/bookings", { scroll: false });
 	};
 
-	if (loading) {
-		return (
-			<div className="py-10 text-base text-gray-500">
-				Loading bookings…
-			</div>
-		);
-	}
-
-	if (error) {
-		return <div className="py-10 text-base text-red-600">{error}</div>;
-	}
-
-	if (items.length === 0) {
-		return (
-			<div className="text-center py-16 space-y-2">
-				<p className="text-xl font-medium">No bookings yet</p>
-				<p className="text-base text-gray-500">
-					Create your first booking to get started.
-				</p>
-			</div>
-		);
-	}
+	useEffect(() => {
+		if (deleted) {
+			setShowToast(true);
+		}
+	}, [deleted]);
 
 	return (
-		<section className="space-y-6">
-			{/* Header */}
-			<div className="flex items-center justify-between">
-				<h2 className="text-2xl font-semibold tracking-tight">
-					Bookings
-				</h2>
-				<span className="text-base text-gray-500">
-					{visibleBookings.length} shown
-				</span>
-			</div>
+		<>
+			{showToast && (
+				<Toast
+					message="✓ Booking deleted"
+					onClose={() => {
+						setShowToast(false);
+						router.replace("/bookings", { scroll: false });
+					}}
+				/>
+			)}
 
-			{/* Filters */}
-			<div className="flex flex-wrap items-center gap-3">
-				{/* Status filter */}
-				<div className="relative">
-					<select
-						value={statusFilter}
-						onChange={(e) => {
-							const next = e.target.value as StatusFilter;
-							setStatusFilter(next);
-							updateQuery(next, sortOrder);
-						}}
-						className="
+			<section className="space-y-6">
+				{/* Header */}
+				<div className="flex items-center justify-between">
+					<h2 className="text-2xl font-semibold tracking-tight">
+						Bookings
+					</h2>
+					<span className="text-base text-gray-500">
+						{visibleBookings.length} shown
+					</span>
+				</div>
+
+				{/* Ako NEMA nijednog booking-a */}
+				{items.length === 0 ? (
+					<div className="text-center py-16 space-y-2">
+						<p className="text-xl font-medium">No bookings yet</p>
+						<p className="text-base text-gray-500">
+							Create your first booking to get started.
+						</p>
+					</div>
+				) : (
+					<>
+						<section className="space-y-6">
+							{/* Filters */}
+							<div className="flex flex-wrap items-center gap-3">
+								{/* Status filter */}
+								<div className="relative">
+									<select
+										value={statusFilter}
+										onChange={(e) => {
+											const next = e.target
+												.value as StatusFilter;
+											setStatusFilter(next);
+											updateQuery(next, sortOrder);
+										}}
+										className="
 							appearance-none
 							border rounded
 							px-3 py-2 pr-10
@@ -137,28 +148,35 @@ const BookingsPage = () => {
 							focus:outline-none
 							focus:ring-2 focus:ring-blue-500
 						"
-					>
-						<option value="all">All statuses</option>
-						<option value="pending">Pending</option>
-						<option value="confirmed">Confirmed</option>
-						<option value="cancelled">Cancelled</option>
-					</select>
+									>
+										<option value="all">
+											All statuses
+										</option>
+										<option value="pending">Pending</option>
+										<option value="confirmed">
+											Confirmed
+										</option>
+										<option value="cancelled">
+											Cancelled
+										</option>
+									</select>
 
-					<span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
-						▼
-					</span>
-				</div>
+									<span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
+										▼
+									</span>
+								</div>
 
-				{/* Sort */}
-				<div className="relative">
-					<select
-						value={sortOrder}
-						onChange={(e) => {
-							const next = e.target.value as SortOrder;
-							setSortOrder(next);
-							updateQuery(statusFilter, next);
-						}}
-						className="
+								{/* Sort */}
+								<div className="relative">
+									<select
+										value={sortOrder}
+										onChange={(e) => {
+											const next = e.target
+												.value as SortOrder;
+											setSortOrder(next);
+											updateQuery(statusFilter, next);
+										}}
+										className="
 							appearance-none
 							border rounded
 							px-3 py-2 pr-10
@@ -166,82 +184,333 @@ const BookingsPage = () => {
 							focus:outline-none
 							focus:ring-2 focus:ring-blue-500
 						"
-					>
-						<option value="newest">Newest first</option>
-						<option value="oldest">Oldest first</option>
-					</select>
+									>
+										<option value="newest">
+											Newest first
+										</option>
+										<option value="oldest">
+											Oldest first
+										</option>
+									</select>
 
-					<span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
-						▼
-					</span>
-				</div>
+									<span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
+										▼
+									</span>
+								</div>
 
-				{/* Reset */}
-				{isFiltered && (
-					<button
-						onClick={resetFilters}
-						className="
+								{/* Reset */}
+								{isFiltered && (
+									<button
+										onClick={resetFilters}
+										className="
 							text-base text-gray-500
 							underline underline-offset-4
 							transition-colors duration-150
 							hover:text-gray-900
 						"
-					>
-						Reset
-					</button>
-				)}
-			</div>
+									>
+										Reset
+									</button>
+								)}
+							</div>
 
-			{/* List */}
-			<ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-				{visibleBookings.map((b) => (
-					<li
-						key={b.id}
-						className="
+							{items.length > 0 &&
+							visibleBookings.length === 0 ? (
+								<div className="text-center py-16 space-y-2">
+									<p className="text-xl font-medium">
+										No results for selected filters
+									</p>
+									<p className="text-base text-gray-500">
+										Try changing or resetting filters.
+									</p>
+
+									<button
+										onClick={resetFilters}
+										className="
+					mt-2 text-base text-gray-500
+					underline underline-offset-4
+					hover:text-gray-900
+				"
+									>
+										Reset filters
+									</button>
+								</div>
+							) : (
+								""
+							)}
+
+							{/* List */}
+							<ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+								{visibleBookings.map((b) => (
+									<li
+										key={b.id}
+										className="
 							rounded-lg border bg-white p-4
 							transition-all duration-150
 							hover:shadow-md hover:-translate-y-0.5
 						"
-					>
-						<div className="space-y-2">
-							<Link
-								href={`/bookings/${b.id}`}
-								className="text-xl font-medium hover:underline"
-							>
-								{b.title}
-							</Link>
+									>
+										<div className="space-y-2">
+											<Link
+												href={`/bookings/${b.id}`}
+												className="text-xl font-medium hover:underline"
+											>
+												{b.title}
+											</Link>
 
-							<div className="text-base text-gray-700">
-								{b.guestName}
-							</div>
+											<div className="text-base text-gray-700">
+												{b.guestName}
+											</div>
 
-							<div className="text-base text-gray-500">
-								{formatDate(b.dateFrom)} →{" "}
-								{formatDate(b.dateTo)}
-								<span className="ml-1 text-gray-400">
-									({getDuration(b.dateFrom, b.dateTo)} nights)
-								</span>
-							</div>
-						</div>
+											<div className="text-base text-gray-500">
+												{formatDate(b.dateFrom)} →{" "}
+												{formatDate(b.dateTo)}
+												<span className="ml-1 text-gray-400">
+													(
+													{getDuration(
+														b.dateFrom,
+														b.dateTo,
+													)}{" "}
+													nights)
+												</span>
+											</div>
+										</div>
 
-						<div className="mt-4 flex items-center justify-between">
-							<span
-								className={`text-sm px-2 py-1 rounded-full ${statusStyles(
-									b.status,
-								)}`}
-							>
-								{b.status}
-							</span>
+										<div className="mt-4 flex items-center justify-between">
+											<span
+												className={`text-sm px-2 py-1 rounded-full ${statusStyles(
+													b.status,
+												)}`}
+											>
+												{b.status}
+											</span>
 
-							<span className="text-sm text-gray-400">
-								Created {formatDate(b.createdAt)}
-							</span>
-						</div>
-					</li>
-				))}
-			</ul>
-		</section>
+											<span className="text-sm text-gray-400">
+												Created{" "}
+												{formatDate(b.createdAt)}
+											</span>
+										</div>
+									</li>
+								))}
+							</ul>
+							{showToast && (
+								<Toast
+									message="✓ Booking deleted"
+									onClose={() => {
+										setShowToast(false);
+										router.replace("/bookings", {
+											scroll: false,
+										});
+									}}
+								/>
+							)}
+						</section>
+					</>
+				)}
+			</section>
+		</>
 	);
+
+	// if (loading) {
+	// 	return (
+	// 		<div className="py-10 text-base text-gray-500">
+	// 			Loading bookings…
+	// 		</div>
+	// 	);
+	// }
+
+	// if (error) {
+	// 	return <div className="py-10 text-base text-red-600">{error}</div>;
+	// }
+
+	// if (items.length === 0) {
+	// 	return (
+	// 		<>
+	// 			{showToast && (
+	// 				<Toast
+	// 					message="✓ Booking deleted"
+	// 					onClose={() => setShowToast(false)}
+	// 				/>
+	// 			)}
+	// 			<div className="text-center py-16 space-y-2">
+	// 				<p className="text-xl font-medium">No bookings yet</p>
+	// 				<p className="text-base text-gray-500">
+	// 					Create your first booking to get started.
+	// 				</p>
+	// 			</div>
+	// 		</>
+	// 	);
+	// }
+
+	// return (
+	// 	<section className="space-y-6">
+	// 		{/* Header */}
+	// 		<div className="flex items-center justify-between">
+	// 			<h2 className="text-2xl font-semibold tracking-tight">
+	// 				Bookings
+	// 			</h2>
+	// 			<span className="text-base text-gray-500">
+	// 				{visibleBookings.length} shown
+	// 			</span>
+	// 		</div>
+
+	// 		{/* Filters */}
+	// 		<div className="flex flex-wrap items-center gap-3">
+	// 			{/* Status filter */}
+	// 			<div className="relative">
+	// 				<select
+	// 					value={statusFilter}
+	// 					onChange={(e) => {
+	// 						const next = e.target.value as StatusFilter;
+	// 						setStatusFilter(next);
+	// 						updateQuery(next, sortOrder);
+	// 					}}
+	// 					className="
+	// 						appearance-none
+	// 						border rounded
+	// 						px-3 py-2 pr-10
+	// 						text-base bg-white
+	// 						focus:outline-none
+	// 						focus:ring-2 focus:ring-blue-500
+	// 					"
+	// 				>
+	// 					<option value="all">All statuses</option>
+	// 					<option value="pending">Pending</option>
+	// 					<option value="confirmed">Confirmed</option>
+	// 					<option value="cancelled">Cancelled</option>
+	// 				</select>
+
+	// 				<span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
+	// 					▼
+	// 				</span>
+	// 			</div>
+
+	// 			{/* Sort */}
+	// 			<div className="relative">
+	// 				<select
+	// 					value={sortOrder}
+	// 					onChange={(e) => {
+	// 						const next = e.target.value as SortOrder;
+	// 						setSortOrder(next);
+	// 						updateQuery(statusFilter, next);
+	// 					}}
+	// 					className="
+	// 						appearance-none
+	// 						border rounded
+	// 						px-3 py-2 pr-10
+	// 						text-base bg-white
+	// 						focus:outline-none
+	// 						focus:ring-2 focus:ring-blue-500
+	// 					"
+	// 				>
+	// 					<option value="newest">Newest first</option>
+	// 					<option value="oldest">Oldest first</option>
+	// 				</select>
+
+	// 				<span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
+	// 					▼
+	// 				</span>
+	// 			</div>
+
+	// 			{/* Reset */}
+	// 			{isFiltered && (
+	// 				<button
+	// 					onClick={resetFilters}
+	// 					className="
+	// 						text-base text-gray-500
+	// 						underline underline-offset-4
+	// 						transition-colors duration-150
+	// 						hover:text-gray-900
+	// 					"
+	// 				>
+	// 					Reset
+	// 				</button>
+	// 			)}
+	// 		</div>
+
+	// 		{items.length > 0 && visibleBookings.length === 0 ? (
+	// 			<div className="text-center py-16 space-y-2">
+	// 				<p className="text-xl font-medium">
+	// 					No results for selected filters
+	// 				</p>
+	// 				<p className="text-base text-gray-500">
+	// 					Try changing or resetting filters.
+	// 				</p>
+
+	// 				<button
+	// 					onClick={resetFilters}
+	// 					className="
+	// 				mt-2 text-base text-gray-500
+	// 				underline underline-offset-4
+	// 				hover:text-gray-900
+	// 			"
+	// 				>
+	// 					Reset filters
+	// 				</button>
+	// 			</div>
+	// 		) : (
+	// 			""
+	// 		)}
+
+	// 		{/* List */}
+	// 		<ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+	// 			{visibleBookings.map((b) => (
+	// 				<li
+	// 					key={b.id}
+	// 					className="
+	// 						rounded-lg border bg-white p-4
+	// 						transition-all duration-150
+	// 						hover:shadow-md hover:-translate-y-0.5
+	// 					"
+	// 				>
+	// 					<div className="space-y-2">
+	// 						<Link
+	// 							href={`/bookings/${b.id}`}
+	// 							className="text-xl font-medium hover:underline"
+	// 						>
+	// 							{b.title}
+	// 						</Link>
+
+	// 						<div className="text-base text-gray-700">
+	// 							{b.guestName}
+	// 						</div>
+
+	// 						<div className="text-base text-gray-500">
+	// 							{formatDate(b.dateFrom)} →{" "}
+	// 							{formatDate(b.dateTo)}
+	// 							<span className="ml-1 text-gray-400">
+	// 								({getDuration(b.dateFrom, b.dateTo)} nights)
+	// 							</span>
+	// 						</div>
+	// 					</div>
+
+	// 					<div className="mt-4 flex items-center justify-between">
+	// 						<span
+	// 							className={`text-sm px-2 py-1 rounded-full ${statusStyles(
+	// 								b.status,
+	// 							)}`}
+	// 						>
+	// 							{b.status}
+	// 						</span>
+
+	// 						<span className="text-sm text-gray-400">
+	// 							Created {formatDate(b.createdAt)}
+	// 						</span>
+	// 					</div>
+	// 				</li>
+	// 			))}
+	// 		</ul>
+	// 		{showToast && (
+	// 			<Toast
+	// 				message="✓ Booking deleted"
+	// 				onClose={() => {
+	// 					setShowToast(false);
+	// 					router.replace("/bookings", { scroll: false });
+	// 				}}
+	// 			/>
+	// 		)}
+	// 	</section>
+	// );
 };
 
 export default BookingsPage;
