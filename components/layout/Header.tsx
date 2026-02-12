@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
+import Image from "next/image";
+import logo from "../../public/logo.svg";
 
 const navLink =
 	"relative px-1 text-base text-gray-700 \
@@ -31,7 +33,16 @@ const Header = () => {
 	return (
 		<header className="border-b bg-white">
 			<div className="container mx-auto px-4 py-4 flex items-center justify-between">
-				<span className="font-semibold text-gray-900">Booking App</span>
+				<span className="font-semibold text-gray-900 ">
+					<Link href="/">
+						<Image
+							src={logo}
+							alt="Booking App"
+							width={120}
+							height={32}
+						/>
+					</Link>
+				</span>
 
 				<nav className="flex items-center gap-6">
 					<Link
