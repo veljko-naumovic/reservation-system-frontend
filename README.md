@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Booking App
 
 Simple booking and reservation management application built with Next.js 14 (App Router), TypeScript, Redux Toolkit, and Tailwind CSS.
@@ -59,6 +60,14 @@ Next.js 14 (App Router)
 
 TypeScript
 
+=======
+Tech Stack
+
+Next.js 14 (App Router)
+
+TypeScript
+
+>>>>>>> 963352708907134034e9b0e4d0da9dc7216b9aeb
 Redux Toolkit
 
 Tailwind CSS
@@ -67,8 +76,11 @@ Client & Server Components
 
 Dynamic Metadata API
 
+<<<<<<< HEAD
 Installation
 
+=======
+>>>>>>> 963352708907134034e9b0e4d0da9dc7216b9aeb
 git clone https://github.com/your-username/reservation-system-frontend.git
 cd reservation-system-frontend
 npm install
