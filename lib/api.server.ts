@@ -11,14 +11,19 @@ export const getBookingById = async (id: string): Promise<Booking | null> => {
 
 		const protocol = host.includes("localhost") ? "http" : "https";
 
-		const res = await fetch(`${protocol}://${host}/api/bookings?id=${id}`, {
+		const url = `${protocol}://${host}/api/bookings?id=${id}`;
+
+		const res = await fetch(url, {
 			cache: "no-store",
 		});
 
 		if (!res.ok) return null;
 
-		return await res.json();
-	} catch {
+		const booking = await res.json();
+
+		return booking;
+	} catch (error) {
+		console.error("FETCH ERROR:", error);
 		return null;
 	}
 };

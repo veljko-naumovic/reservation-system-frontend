@@ -17,6 +17,7 @@ interface Props {
 }
 const BookingDetailsPage = async ({ params }: Props) => {
 	const { id } = await params;
+	console.log("BOOKING ID:", id);
 
 	const booking = await getBookingById(id);
 
