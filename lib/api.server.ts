@@ -3,16 +3,22 @@ import { headers } from "next/headers";
 import { Booking } from "@/types/booking";
 
 export const getBookingById = async (id: string): Promise<Booking | null> => {
-	const headersList = await headers();
-	const host = headersList.get("host");
+	try {
+		const headersList = await headers();
+		const host = headersList.get("host");
 
-	const protocol = host?.includes("localhost") ? "http" : "https";
+		if (!host) return null;
 
-	const res = await fetch(`${protocol}://${host}/api/bookings?id=${id}`, {
-		cache: "no-store",
-	});
+		const protocol = host.includes("localhost") ? "http" : "https";
 
-	if (!res.ok) return null;
+		const res = await fetch(`${protocol}://${host}/api/bookings?id=${id}`, {
+			cache: "no-store",
+		});
 
-	return res.json();
+		if (!res.ok) return null;
+
+		return await res.json();
+	} catch {
+		return null;
+	}
 };
